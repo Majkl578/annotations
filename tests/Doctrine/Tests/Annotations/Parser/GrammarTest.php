@@ -207,47 +207,53 @@ DOCBLOCK
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, v1)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  token(value:integer, 1)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  token(value:integer, 2)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  token(value:integer, 3)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 1)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 2)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 3)
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, v2)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  token(annot:simple_identifier, one)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  token(annot:simple_identifier, two)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  token(annot:simple_identifier, three)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  token(annot:simple_identifier, one)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  token(annot:simple_identifier, two)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  token(annot:simple_identifier, three)
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, v3)
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, one)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  token(value:integer, 1)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, two)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  token(value:integer, 2)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, three)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  token(value:integer, 3)
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, v4)
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, one)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #annotation
@@ -256,7 +262,7 @@ DOCBLOCK
 >  >  >  >  >  >  >  >  >  >  >  #unnamed_parameter
 >  >  >  >  >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  >  >  >  >  token(value:integer, 1)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, two)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #annotation
@@ -265,7 +271,7 @@ DOCBLOCK
 >  >  >  >  >  >  >  >  >  >  >  #unnamed_parameter
 >  >  >  >  >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  >  >  >  >  token(value:integer, 2)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:identifier, three)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #annotation
@@ -443,10 +449,11 @@ DOCBLOCK
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, cascade)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  token(string:string, persist)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  token(string:string, persist)
 >  >  #annotation
 >  >  >  token(annot:valued_identifier, ORM\JoinTable)
 >  >  >  #parameters
@@ -458,39 +465,41 @@ DOCBLOCK
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, joinColumns)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  token(annot:valued_identifier, ORM\JoinColumn)
->  >  >  >  >  >  >  >  >  #parameters
->  >  >  >  >  >  >  >  >  >  #named_parameter
->  >  >  >  >  >  >  >  >  >  >  token(value:identifier, name)
->  >  >  >  >  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, user_id)
->  >  >  >  >  >  >  >  >  >  #named_parameter
->  >  >  >  >  >  >  >  >  >  >  token(value:identifier, referencedColumnName)
->  >  >  >  >  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, id)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  token(annot:valued_identifier, ORM\JoinColumn)
+>  >  >  >  >  >  >  >  >  >  #parameters
+>  >  >  >  >  >  >  >  >  >  >  #named_parameter
+>  >  >  >  >  >  >  >  >  >  >  >  token(value:identifier, name)
+>  >  >  >  >  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, user_id)
+>  >  >  >  >  >  >  >  >  >  >  #named_parameter
+>  >  >  >  >  >  >  >  >  >  >  >  token(value:identifier, referencedColumnName)
+>  >  >  >  >  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, id)
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, inverseJoinColumns)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  token(annot:valued_identifier, ORM\JoinColumn)
->  >  >  >  >  >  >  >  >  #parameters
->  >  >  >  >  >  >  >  >  >  #named_parameter
->  >  >  >  >  >  >  >  >  >  >  token(value:identifier, name)
->  >  >  >  >  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, group_id)
->  >  >  >  >  >  >  >  >  >  #named_parameter
->  >  >  >  >  >  >  >  >  >  >  token(value:identifier, referencedColumnName)
->  >  >  >  >  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, id)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  token(annot:valued_identifier, ORM\JoinColumn)
+>  >  >  >  >  >  >  >  >  >  #parameters
+>  >  >  >  >  >  >  >  >  >  >  #named_parameter
+>  >  >  >  >  >  >  >  >  >  >  >  token(value:identifier, name)
+>  >  >  >  >  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, group_id)
+>  >  >  >  >  >  >  >  >  >  >  #named_parameter
+>  >  >  >  >  >  >  >  >  >  >  >  token(value:identifier, referencedColumnName)
+>  >  >  >  >  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  >  >  >  >  token(string:string, id)
 
 TRACE
             ,
@@ -515,8 +524,8 @@ DOCBLOCK
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, defaults)
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, value)
 >  >  >  >  >  >  >  >  #value
@@ -779,6 +788,34 @@ DOCBLOCK
 TRACE
             ,
         ];
+
+        yield 'mixed collections' => [
+            <<<'DOCBLOCK'
+/** @Foo({123, 456 = 789, 0}) */
+DOCBLOCK
+            ,
+            <<<'TRACE'
+>  #annotations
+>  >  #annotation
+>  >  >  token(annot:valued_identifier, Foo)
+>  >  >  #parameters
+>  >  >  >  #unnamed_parameter
+>  >  >  >  >  #value
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 123)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  token(value:integer, 456)
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 789)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 0)
+
+TRACE
+            ,
+        ];
     }
 
     /**
@@ -792,7 +829,8 @@ TRACE
 /**
  * @Name(foo={1,2, {"key"=@Name}})
  */
-DOCBLOCK,
+DOCBLOCK
+            ,
             <<<'TRACE'
 >  #annotations
 >  >  #annotation
@@ -801,19 +839,22 @@ DOCBLOCK,
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, foo)
 >  >  >  >  >  #value
->  >  >  >  >  >  #list
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  token(value:integer, 1)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  token(value:integer, 2)
->  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  #map
->  >  >  >  >  >  >  >  >  #pair
->  >  >  >  >  >  >  >  >  >  #string
->  >  >  >  >  >  >  >  >  >  >  token(string:string, key)
->  >  >  >  >  >  >  >  >  >  #value
->  >  >  >  >  >  >  >  >  >  >  #annotation
->  >  >  >  >  >  >  >  >  >  >  >  token(annot:simple_identifier, Name)
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 1)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  token(value:integer, 2)
+>  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  >  >  >  #collection_entry
+>  >  >  >  >  >  >  >  >  >  >  #string
+>  >  >  >  >  >  >  >  >  >  >  >  token(string:string, key)
+>  >  >  >  >  >  >  >  >  >  >  #value
+>  >  >  >  >  >  >  >  >  >  >  >  #annotation
+>  >  >  >  >  >  >  >  >  >  >  >  >  token(annot:simple_identifier, Name)
 
 TRACE
         ];
@@ -850,8 +891,8 @@ DOCBLOCK
 >  >  >  >  #named_parameter
 >  >  >  >  >  token(value:identifier, foo)
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, key1)
 >  >  >  >  >  >  >  >  #value
@@ -876,13 +917,13 @@ DOCBLOCK
 >  >  >  #parameters
 >  >  >  >  #unnamed_parameter
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:integer, 2)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  >  token(string:string, foo)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  token(value:integer, 4)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #string
@@ -940,14 +981,14 @@ DOCBLOCK
 >  >  >  >  >  >  >  token(annot:simple_identifier, Name)
 >  >  >  >  #unnamed_parameter
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, key1)
 >  >  >  >  >  >  >  >  #value
 >  >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  >  token(string:string, value1)
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, key2)
 >  >  >  >  >  >  >  >  #value
@@ -999,8 +1040,8 @@ DOCBLOCK
 >  >  >  #parameters
 >  >  >  >  #unnamed_parameter
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, key1)
 >  >  >  >  >  >  >  >  #value
@@ -1025,8 +1066,8 @@ DOCBLOCK
 >  >  >  #parameters
 >  >  >  >  #unnamed_parameter
 >  >  >  >  >  #value
->  >  >  >  >  >  #map
->  >  >  >  >  >  >  #pair
+>  >  >  >  >  >  #collection
+>  >  >  >  >  >  >  #collection_entry
 >  >  >  >  >  >  >  >  #string
 >  >  >  >  >  >  >  >  >  token(string:string, key1)
 >  >  >  >  >  >  >  >  #value

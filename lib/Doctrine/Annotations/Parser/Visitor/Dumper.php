@@ -7,8 +7,10 @@ namespace Doctrine\Annotations\Parser\Visitor;
 use Doctrine\Annotations\Parser\Ast\Annotation;
 use Doctrine\Annotations\Parser\Ast\Annotations;
 use Doctrine\Annotations\Parser\Ast\ClassConstantFetch;
-use Doctrine\Annotations\Parser\Ast\Collection\ListCollection;
-use Doctrine\Annotations\Parser\Ast\Collection\MapCollection;
+use Doctrine\Annotations\Parser\Ast\Collection\Collection;
+use Doctrine\Annotations\Parser\Ast\Collection\Entry;
+use Doctrine\Annotations\Parser\Ast\Collection\NamedEntry;
+use Doctrine\Annotations\Parser\Ast\Collection\PositionalEntry;
 use Doctrine\Annotations\Parser\Ast\ConstantFetch;
 use Doctrine\Annotations\Parser\Ast\Node;
 use Doctrine\Annotations\Parser\Ast\Pair;
@@ -101,25 +103,33 @@ final class Dumper implements Visitor
         $this->depth--;
     }
 
-    public function visitListCollection(ListCollection $listCollection) : void
+    public function visitCollection(Collection $collection) : void
     {
-        $this->print(ListCollection::class);
+        $this->print(Collection::class);
 
         $this->depth++;
-        foreach ($listCollection as $item) {
+        foreach ($collection as $item) {
             $item->dispatch($this);
         }
         $this->depth--;
     }
 
-    public function visitMapCollection(MapCollection $mapCollection) : void
+    public function visitCollectionPositionalEntry(PositionalEntry $entry) : void
     {
-        $this->print(MapCollection::class);
+        $this->print(Entry::class);
 
         $this->depth++;
-        foreach ($mapCollection as $item) {
-            $item->dispatch($this);
-        }
+        $entry->getValue()->dispatch($this);
+        $this->depth--;
+    }
+
+    public function visitCollectionNamedEntry(NamedEntry $entry) : void
+    {
+        $this->print(Entry::class);
+
+        $this->depth++;
+        $entry->getKey()->dispatch($this);
+        $entry->getValue()->dispatch($this);
         $this->depth--;
     }
 

@@ -9,8 +9,8 @@ final class Nodes
     public const ANNOTATION          = '#annotation';
     public const ANNOTATIONS         = '#annotations';
     public const CLASS_CONSTANT      = '#class_constant';
-    public const LIST                = '#list';
-    public const MAP                 = '#map';
+    public const COLLECTION          = '#collection';
+    public const COLLECTION_ENTRY    = '#collection_entry';
     public const NAMED_PARAMETERS    = '#named_parameter';
     public const PAIR                = '#pair';
     public const PARAMETERS          = '#parameters';

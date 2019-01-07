@@ -7,11 +7,11 @@ namespace Doctrine\Tests\Annotations\Parser;
 use Doctrine\Annotations\Parser\Ast\Annotation;
 use Doctrine\Annotations\Parser\Ast\Annotations;
 use Doctrine\Annotations\Parser\Ast\ClassConstantFetch;
-use Doctrine\Annotations\Parser\Ast\Collection\ListCollection;
-use Doctrine\Annotations\Parser\Ast\Collection\MapCollection;
+use Doctrine\Annotations\Parser\Ast\Collection\Collection;
+use Doctrine\Annotations\Parser\Ast\Collection\NamedEntry;
+use Doctrine\Annotations\Parser\Ast\Collection\PositionalEntry;
 use Doctrine\Annotations\Parser\Ast\ConstantFetch;
 use Doctrine\Annotations\Parser\Ast\Node;
-use Doctrine\Annotations\Parser\Ast\Pair;
 use Doctrine\Annotations\Parser\Ast\Parameter\NamedParameter;
 use Doctrine\Annotations\Parser\Ast\Parameter\UnnamedParameter;
 use Doctrine\Annotations\Parser\Ast\Parameters;
@@ -237,41 +237,47 @@ DOCBLOCK
                     new Parameters(
                         new NamedParameter(
                             new Identifier('v1'),
-                            new ListCollection(
-                                new IntegerScalar(1),
-                                new IntegerScalar(2),
-                                new IntegerScalar(3)
+                            new Collection(
+                                new PositionalEntry(new IntegerScalar(1)),
+                                new PositionalEntry(new IntegerScalar(2)),
+                                new PositionalEntry(new IntegerScalar(3))
                             )
                         ),
                         new NamedParameter(
                             new Identifier('v2'),
-                            new ListCollection(
-                                new Annotation(
-                                    new Reference('one', false),
-                                    new Parameters()
+                            new Collection(
+                                new PositionalEntry(
+                                    new Annotation(
+                                        new Reference('one', false),
+                                        new Parameters()
+                                    )
                                 ),
-                                new Annotation(
-                                    new Reference('two', false),
-                                    new Parameters()
+                                new PositionalEntry(
+                                    new Annotation(
+                                        new Reference('two', false),
+                                        new Parameters()
+                                    )
                                 ),
-                                new Annotation(
-                                    new Reference('three', false),
-                                    new Parameters()
+                                new PositionalEntry(
+                                    new Annotation(
+                                        new Reference('three', false),
+                                        new Parameters()
+                                    )
                                 )
                             )
                         ),
                         new NamedParameter(
                             new Identifier('v3'),
-                            new MapCollection(
-                                new Pair(new Identifier('one'), new IntegerScalar(1)),
-                                new Pair(new Identifier('two'), new IntegerScalar(2)),
-                                new Pair(new Identifier('three'), new IntegerScalar(3))
+                            new Collection(
+                                new NamedEntry(new Identifier('one'), new IntegerScalar(1)),
+                                new NamedEntry(new Identifier('two'), new IntegerScalar(2)),
+                                new NamedEntry(new Identifier('three'), new IntegerScalar(3))
                             )
                         ),
                         new NamedParameter(
                             new Identifier('v4'),
-                            new MapCollection(
-                                new Pair(
+                            new Collection(
+                                new NamedEntry(
                                     new Identifier('one'),
                                     new Annotation(
                                         new Reference('one', false),
@@ -280,7 +286,7 @@ DOCBLOCK
                                         )
                                     )
                                 ),
-                                new Pair(
+                                new NamedEntry(
                                     new Identifier('two'),
                                     new Annotation(
                                         new Reference('two', false),
@@ -289,7 +295,7 @@ DOCBLOCK
                                         )
                                     )
                                 ),
-                                new Pair(
+                                new NamedEntry(
                                     new Identifier('three'),
                                     new Annotation(
                                         new Reference('three', false),
@@ -440,8 +446,10 @@ DOCBLOCK
                         ),
                         new NamedParameter(
                             new Identifier('cascade'),
-                            new ListCollection(
-                                new StringScalar('persist')
+                            new Collection(
+                                new PositionalEntry(
+                                    new StringScalar('persist')
+                                )
                             )
                         )
                     )
@@ -455,17 +463,19 @@ DOCBLOCK
                         ),
                         new NamedParameter(
                             new Identifier('joinColumns'),
-                            new ListCollection(
-                                new Annotation(
-                                    new Reference('ORM\JoinColumn', false),
-                                    new Parameters(
-                                        new NamedParameter(
-                                            new Identifier('name'),
-                                            new StringScalar('user_id')
-                                        ),
-                                        new NamedParameter(
-                                            new Identifier('referencedColumnName'),
-                                            new StringScalar('id')
+                            new Collection(
+                                new PositionalEntry(
+                                    new Annotation(
+                                        new Reference('ORM\JoinColumn', false),
+                                        new Parameters(
+                                            new NamedParameter(
+                                                new Identifier('name'),
+                                                new StringScalar('user_id')
+                                            ),
+                                            new NamedParameter(
+                                                new Identifier('referencedColumnName'),
+                                                new StringScalar('id')
+                                            )
                                         )
                                     )
                                 )
@@ -473,17 +483,19 @@ DOCBLOCK
                         ),
                         new NamedParameter(
                             new Identifier('inverseJoinColumns'),
-                            new ListCollection(
-                                new Annotation(
-                                    new Reference('ORM\JoinColumn', false),
-                                    new Parameters(
-                                        new NamedParameter(
-                                            new Identifier('name'),
-                                            new StringScalar('group_id')
-                                        ),
-                                        new NamedParameter(
-                                            new Identifier('referencedColumnName'),
-                                            new StringScalar('id')
+                            new Collection(
+                                new PositionalEntry(
+                                    new Annotation(
+                                        new Reference('ORM\JoinColumn', false),
+                                        new Parameters(
+                                            new NamedParameter(
+                                                new Identifier('name'),
+                                                new StringScalar('group_id')
+                                            ),
+                                            new NamedParameter(
+                                                new Identifier('referencedColumnName'),
+                                                new StringScalar('id')
+                                            )
                                         )
                                     )
                                 )
@@ -508,8 +520,8 @@ DOCBLOCK
                         new UnnamedParameter(new StringScalar('/argument_with_route_param_and_default/{value}')),
                         new NamedParameter(
                             new Identifier('defaults'),
-                            new MapCollection(
-                                new Pair(new StringScalar('value'), new StringScalar('value'))
+                            new Collection(
+                                new NamedEntry(new StringScalar('value'), new StringScalar('value'))
                             )
                         ),
                         new NamedParameter(
@@ -686,6 +698,34 @@ DOCBLOCK
                             new Annotation(
                                 new Reference('Bar', false),
                                 new Parameters()
+                            )
+                        )
+                    )
+                )
+            ),
+        ];
+
+        yield [
+            <<<'DOCBLOCK'
+/** @Foo({123, 456 = 789, 0}) */
+DOCBLOCK
+            ,
+            new Annotations(
+                new Annotation(
+                    new Reference('Foo', false),
+                    new Parameters(
+                        new UnnamedParameter(
+                            new Collection(
+                                new PositionalEntry(
+                                    new IntegerScalar(123)
+                                ),
+                                new NamedEntry(
+                                    new IntegerScalar(456),
+                                    new IntegerScalar(789)
+                                ),
+                                new PositionalEntry(
+                                    new IntegerScalar(0)
+                                )
                             )
                         )
                     )

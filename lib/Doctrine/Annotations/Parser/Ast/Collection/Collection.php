@@ -4,23 +4,24 @@ declare(strict_types=1);
 
 namespace Doctrine\Annotations\Parser\Ast\Collection;
 
-use Doctrine\Annotations\Parser\Ast\Collection;
-use Doctrine\Annotations\Parser\Ast\ValuableNode;
+use Countable;
+use Doctrine\Annotations\Parser\Ast\Value;
 use Doctrine\Annotations\Parser\Visitor\Visitor;
+use IteratorAggregate;
 use function count;
 
-final class ListCollection implements Collection
+final class Collection implements Value, IteratorAggregate, Countable
 {
-    /** @var ValuableNode[] */
+    /** @var Entry[] */
     private $items;
 
-    public function __construct(ValuableNode ...$items)
+    public function __construct(Entry ...$items)
     {
         $this->items = $items;
     }
 
     /**
-     * @return ValuableNode[]
+     * @return Entry[]
      */
     public function getIterator() : iterable
     {
@@ -34,6 +35,6 @@ final class ListCollection implements Collection
 
     public function dispatch(Visitor $visitor) : void
     {
-        $visitor->visitListCollection($this);
+        $visitor->visitCollection($this);
     }
 }

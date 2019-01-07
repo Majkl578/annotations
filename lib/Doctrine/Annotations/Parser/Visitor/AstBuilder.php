@@ -7,8 +7,10 @@ namespace Doctrine\Annotations\Parser\Visitor;
 use Doctrine\Annotations\Parser\Ast\Annotation;
 use Doctrine\Annotations\Parser\Ast\Annotations;
 use Doctrine\Annotations\Parser\Ast\ClassConstantFetch;
-use Doctrine\Annotations\Parser\Ast\Collection\ListCollection;
-use Doctrine\Annotations\Parser\Ast\Collection\MapCollection;
+use Doctrine\Annotations\Parser\Ast\Collection\Collection;
+use Doctrine\Annotations\Parser\Ast\Collection\Entry;
+use Doctrine\Annotations\Parser\Ast\Collection\NamedEntry;
+use Doctrine\Annotations\Parser\Ast\Collection\PositionalEntry;
 use Doctrine\Annotations\Parser\Ast\ConstantFetch;
 use Doctrine\Annotations\Parser\Ast\Node;
 use Doctrine\Annotations\Parser\Ast\Pair;
@@ -58,6 +60,10 @@ final class AstBuilder implements Visit
                 return $this->visitAnnotations($node);
             case Nodes::ANNOTATION:
                 return $this->visitAnnotation($node);
+            case Nodes::COLLECTION:
+                return $this->visitCollection($node);
+            case Nodes::COLLECTION_ENTRY:
+                return $this->visitCollectionEntry($node);
             case Nodes::PAIR:
                 return $this->visitPair($node);
             case Nodes::PARAMETERS:
@@ -68,10 +74,6 @@ final class AstBuilder implements Visit
                 return $this->visitUnnamedParameter($node);
             case Nodes::VALUE:
                 return $this->visitValue($node);
-            case Nodes::MAP:
-                return $this->visitMap($node);
-            case Nodes::LIST:
-                return $this->visitList($node);
             case Nodes::STANDALONE_CONSTANT:
                 return $this->visitStandaloneConstant($node);
             case Nodes::CLASS_CONSTANT:
@@ -166,9 +168,9 @@ final class AstBuilder implements Visit
         return $node->getChild(0)->accept($this);
     }
 
-    private function visitMap(TreeNode $node) : MapCollection
+    private function visitCollection(TreeNode $node) : Collection
     {
-        return new MapCollection(
+        return new Collection(
             ...(function (TreeNode ...$nodes) : iterable {
                 foreach ($nodes as $node) {
                     yield $node->accept($this);
@@ -177,14 +179,15 @@ final class AstBuilder implements Visit
         );
     }
 
-    private function visitList(TreeNode $node) : ListCollection
+    private function visitCollectionEntry(TreeNode $node) : Entry
     {
-        return new ListCollection(
-            ...(function (TreeNode ...$nodes) : iterable {
-                foreach ($nodes as $node) {
-                    yield $node->accept($this);
-                }
-            })(...$node->getChildren())
+        if ($node->getChildrenNumber() === 1) {
+            return new PositionalEntry($node->getChild(0)->accept($this));
+        }
+
+        return new NamedEntry(
+            $node->getChild(0)->accept($this),
+            $node->getChild(1)->accept($this)
         );
     }
 

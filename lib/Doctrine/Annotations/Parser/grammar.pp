@@ -46,11 +46,14 @@
         | ( <valued_identifier> ::parenthesis_:: ( parameters() )? ::_parenthesis:: )
     )
 
-#list:
-    ::brace_:: ( (value() ( ::comma:: value() )*) ::comma::? )? ::_brace::
+#collection:
+    ::brace_:: ( collection_entry() ( ::comma:: collection_entry() )* )? ::comma::? ::_brace::
 
-#map:
-    ::brace_:: pairs() ::comma::? ::_brace::
+#collection_entry:
+    ( collection_key() ( ::colon:: | ::equals:: ) )? value()
+
+collection_key:
+    <integer> | string() | <identifier> | constant()
 
 pairs:
     pair() ( ::comma:: pair() )*
@@ -59,7 +62,7 @@ pairs:
     (<identifier> | <identifier_ns> | string() | <integer> | <float> | constant()) ( ::equals:: | ::colon:: ) value()
 
 #value:
-    <null> | <boolean> | string() | <integer> | <float> | map() | list() | annotation() | constant()
+    <null> | <boolean> | string() | <integer> | <float> | collection() | annotation() | constant()
 
 #parameters:
     ( parameter() ( ::comma:: parameter())* ::comma::? )?

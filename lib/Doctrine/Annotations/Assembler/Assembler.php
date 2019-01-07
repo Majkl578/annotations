@@ -12,8 +12,9 @@ use Doctrine\Annotations\Metadata\Reflection\ClassReflectionProvider;
 use Doctrine\Annotations\Parser\Ast\Annotation;
 use Doctrine\Annotations\Parser\Ast\Annotations;
 use Doctrine\Annotations\Parser\Ast\ClassConstantFetch;
-use Doctrine\Annotations\Parser\Ast\Collection\ListCollection;
-use Doctrine\Annotations\Parser\Ast\Collection\MapCollection;
+use Doctrine\Annotations\Parser\Ast\Collection\Collection;
+use Doctrine\Annotations\Parser\Ast\Collection\NamedEntry;
+use Doctrine\Annotations\Parser\Ast\Collection\PositionalEntry;
 use Doctrine\Annotations\Parser\Ast\ConstantFetch;
 use Doctrine\Annotations\Parser\Ast\Pair;
 use Doctrine\Annotations\Parser\Ast\Parameter\NamedParameter;
@@ -254,29 +255,37 @@ final class Assembler
                 $this->stack->push($nullScalar->getValue());
             }
 
-            public function visitListCollection(ListCollection $listCollection) : void
+            public function visitCollection(Collection $collection) : void
             {
-                $list = [];
+                $array = [];
 
-                foreach ($listCollection as $listItem) {
-                    $listItem->dispatch($this);
+                foreach ($collection as $item) {
+                    $item->dispatch($this);
 
-                    $list[] = $this->stack->pop();
+                    if ($item instanceof PositionalEntry) {
+                        $array[] = $this->stack->pop();
+                        continue;
+                    }
+
+                    assert($item instanceof NamedEntry);
+
+                    [$value, $key] = [$this->stack->pop(), $this->stack->pop()];
+
+                    $array[$key] = $value;
                 }
 
-                $this->stack->push($list);
+                $this->stack->push($array);
             }
 
-            public function visitMapCollection(MapCollection $mapCollection) : void
+            public function visitCollectionPositionalEntry(PositionalEntry $entry) : void
             {
-                $map = [];
+                $entry->getValue()->dispatch($this);
+            }
 
-                foreach ($mapCollection as $mapItem) {
-                    $mapItem->dispatch($this);
-                    $map[$this->stack->pop()] = $this->stack->pop();
-                }
-
-                $this->stack->push($map);
+            public function visitCollectionNamedEntry(NamedEntry $entry) : void
+            {
+                $entry->getKey()->dispatch($this);
+                $entry->getValue()->dispatch($this);
             }
 
             public function visitConstantFetch(ConstantFetch $constantFetch) : void

@@ -7,8 +7,9 @@ namespace Doctrine\Annotations\Parser\Visitor;
 use Doctrine\Annotations\Parser\Ast\Annotation;
 use Doctrine\Annotations\Parser\Ast\Annotations;
 use Doctrine\Annotations\Parser\Ast\ClassConstantFetch;
-use Doctrine\Annotations\Parser\Ast\Collection\ListCollection;
-use Doctrine\Annotations\Parser\Ast\Collection\MapCollection;
+use Doctrine\Annotations\Parser\Ast\Collection\Collection;
+use Doctrine\Annotations\Parser\Ast\Collection\NamedEntry;
+use Doctrine\Annotations\Parser\Ast\Collection\PositionalEntry;
 use Doctrine\Annotations\Parser\Ast\ConstantFetch;
 use Doctrine\Annotations\Parser\Ast\Pair;
 use Doctrine\Annotations\Parser\Ast\Parameter\NamedParameter;
@@ -36,9 +37,11 @@ interface Visitor
 
     public function visitUnnamedParameter(UnnamedParameter $parameter) : void;
 
-    public function visitListCollection(ListCollection $listCollection) : void;
+    public function visitCollection(Collection $collection) : void;
 
-    public function visitMapCollection(MapCollection $mapCollection) : void;
+    public function visitCollectionPositionalEntry(PositionalEntry $entry) : void;
+
+    public function visitCollectionNamedEntry(NamedEntry $entry) : void;
 
     public function visitPair(Pair $pair) : void;
 
