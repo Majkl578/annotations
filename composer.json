@@ -24,7 +24,10 @@
         "sort-packages": true
     },
     "autoload": {
-        "psr-4": { "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations" }
+        "psr-4": {
+            "Doctrine\\Annotations\\": "lib/Doctrine/Annotations",
+            "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
+        }
     },
     "autoload-dev": {
         "psr-4": {
