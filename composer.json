@@ -20,7 +20,8 @@
     ],
     "require": {
         "php": "^7.2",
-        "doctrine/lexer": "1.*"
+        "doctrine/lexer": "1.*",
+        "hoa/compiler": "^3.17"
     },
     "require-dev": {
         "doctrine/coding-standard": "^4.0",
