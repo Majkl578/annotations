@@ -13,7 +13,7 @@ class IntegerType implements ScalarType
 {
     public function describe() : string
     {
-        return 'integer';
+        return 'int';
     }
 
     /**

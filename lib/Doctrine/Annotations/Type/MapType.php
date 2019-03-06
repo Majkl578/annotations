@@ -21,7 +21,10 @@ class MapType implements Type
 
     public function __construct(Type $keyType, Type $valueType)
     {
-        assert($keyType instanceof ScalarType || $keyType instanceof UnionType, 'Invalid key type');
+        assert(
+            $keyType instanceof ScalarType || $keyType instanceof UnionType,
+            sprintf('Invalid key type %s', $keyType->describe())
+        );
 
         $this->keyType   = $keyType;
         $this->valueType = $valueType;

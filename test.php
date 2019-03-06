@@ -1,10 +1,24 @@
 <?php
 
+use Doctrine\Annotations\TypeParser\NativeTypeParser;
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-$compiler = Hoa\Compiler\Llk\Llk::load(new Hoa\File\Read(__DIR__ . '/lib/Doctrine/Annotations/TypeParser/type.pp'));
+$parser = new NativeTypeParser();
+$type   = $parser->parsePropertyType('@var array<int, array<int, stdClass[]>>[]', []);
 
-
-$ast = $compiler->parse('int&int&int|int', 'any');
-
-echo (new Hoa\Compiler\Visitor\Dump())->visit($ast);
+var_dump($type);
+var_dump($type->describe());
+var_dump(
+    $type->validate(
+        [
+            [
+                1 => [
+                    2 => [
+                        new stdClass(),
+                    ],
+                ],
+            ]
+        ]
+    )
+);

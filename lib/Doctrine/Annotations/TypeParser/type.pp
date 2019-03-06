@@ -1,15 +1,16 @@
 %skip whitespace \s+
 
-%token boolean        (?i)bool
-%token integer        (?i)int
-%token float          (?i)float
-%token string         (?i)string
-%token array          (?i)array
-%token object         (?i)object
-
 %token null           (?i)null
+%token boolean        (?i)bool(?:ean)?
 %token true           (?i)true
 %token false          (?i)false
+%token string         (?i)string
+%token integer        (?i)int(?:eger)?
+%token float          (?i)float
+%token array          (?i)array
+%token object         (?i)object
+%token iterable       (?i)iterable
+%token callable       (?i)callable
 
 %token comma          ,
 %token bracket_       <
@@ -23,27 +24,57 @@
 
 %token identifier     \\?[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*
 
-#type:
-    simple() composition()?
+type:
+    nonList() | list() | intersection() | union()
 
-simple:
+nonList:
     null()
     | boolean()
+    | string()
     | integer()
     | float()
-    | string()
-    | object()
-    | class()
     | array()
+    | object()
+    | iterable()
+    | callable()
 
-composition:
-    union()+ | intersection()+
+#list:
+    nonList() ( <square_> <_square> )+
+
+nonUnion:
+    null()
+    | boolean()
+    | string()
+    | integer()
+    | float()
+    | array()
+    | object()
+    | iterable()
+    | callable()
+    | list()
+    | ( ::parenthesis_:: intersection() ::_parenthesis:: )
+
+nonIntersection:
+    null()
+    | boolean()
+    | string()
+    | integer()
+    | float()
+    | array()
+    | object()
+    | iterable()
+    | callable()
+    | list()
+    | ( ::parenthesis_:: union() ::_parenthesis:: )
 
 #null:
     ::null::
 
 #boolean:
-    ::boolean::
+    ::boolean:: | <true> | <false>
+
+#string:
+    ::string::
 
 #integer:
     ::integer::
@@ -51,21 +82,26 @@ composition:
 #float:
     ::float::
 
-#string:
-    ::string::
-
 #object:
     ::object::
+    | ( <identifier> generic()? )
 
-#class:
-    <identifier>
+#iterable:
+    ::iterable:: generic()?
+
+#callable:
+    ::callable::
+
 
 #array:
-    ( ::array:: ::bracket_:: ( ( integer() | string() ) ::comma:: ) type() ::_bracket:: )
-    | ( type() ::square_:: ::_square:: )
+    ( ::array:: generic()? )
+
+#generic:
+    ::bracket_:: type() ( ::comma:: type() )* ::_bracket::
 
 #union:
-    ::union:: ( simple() | ( ::parenthesis_:: type() ) ::_parenthesis:: ) )
+    nonUnion() ::union:: nonUnion()
 
 #intersection:
-    ::intersection:: ( simple() | ( ::parenthesis_:: type() ::_parenthesis:: ) )
+    nonIntersection() ::intersection:: nonIntersection()
+

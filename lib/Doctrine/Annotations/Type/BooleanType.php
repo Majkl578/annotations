@@ -13,7 +13,7 @@ class BooleanType implements ScalarType
 {
     public function describe() : string
     {
-        return 'boolean';
+        return 'bool';
     }
 
     /**

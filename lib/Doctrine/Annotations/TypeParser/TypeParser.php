@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Doctrine\Annotations\TypeParser;
 
-use Doctrine\Annotations\Metadata\Type\Type;
-use Doctrine\Annotations\Parser\Scope;
+use Doctrine\Annotations\Type\Type;
 
 interface TypeParser
 {
-    public function parsePropertyType(string $docBlock, Scope $scope) : Type;
+    /**
+     * @param array<string, string> $imports
+     */
+    public function parsePropertyType(string $docBlock, array $imports) : Type;
 }
