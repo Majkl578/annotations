@@ -39,24 +39,14 @@ class ListType implements Type
             return false;
         }
 
-        $i = 0;
-        foreach ($value as $key => $innerValue) {
-            if ($key !== $i) {
-                return false;
+        foreach ($value as $innerValue) {
+            if ($this->valueType->validate($innerValue)) {
+                continue;
             }
 
-            if (! $this->valueType->validate($innerValue)) {
-                return false;
-            }
-
-            $i++;
+            return false;
         }
 
         return true;
-    }
-
-    public function acceptsNull() : bool
-    {
-        return $this->valueType->acceptsNull();
     }
 }

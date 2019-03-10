@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\StringType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\StringType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
 
 final class StringTypeTest extends TypeTest
@@ -15,9 +15,9 @@ final class StringTypeTest extends TypeTest
         return new StringType();
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('string', $this->getType()->describe());
+        return 'string';
     }
 
     /**
@@ -44,10 +44,5 @@ final class StringTypeTest extends TypeTest
         yield [1.234];
         yield [[123]];
         yield [new stdClass()];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertFalse($this->getType()->acceptsNull());
     }
 }

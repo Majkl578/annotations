@@ -23,9 +23,4 @@ class BooleanType implements ScalarType
     {
         return is_bool($value);
     }
-
-    public function acceptsNull() : bool
-    {
-        return false;
-    }
 }

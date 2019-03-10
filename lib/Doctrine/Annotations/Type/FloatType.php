@@ -23,9 +23,4 @@ class FloatType implements ScalarType
     {
         return is_float($value);
     }
-
-    public function acceptsNull() : bool
-    {
-        return false;
-    }
 }

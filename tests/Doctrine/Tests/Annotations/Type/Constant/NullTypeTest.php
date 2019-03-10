@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type\Constant;
 
-use Doctrine\Annotations\Metadata\Type\NullType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\Constant\NullType;
+use Doctrine\Annotations\Type\Type;
+use Doctrine\Tests\Annotations\Type\TypeTest;
 use stdClass;
 
 final class NullTypeTest extends TypeTest
@@ -15,9 +16,9 @@ final class NullTypeTest extends TypeTest
         return new NullType();
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('null', $this->getType()->describe());
+        return 'null';
     }
 
     /**
@@ -40,10 +41,5 @@ final class NullTypeTest extends TypeTest
         yield [123];
         yield [[]];
         yield [new stdClass()];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertTrue($this->getType()->acceptsNull());
     }
 }

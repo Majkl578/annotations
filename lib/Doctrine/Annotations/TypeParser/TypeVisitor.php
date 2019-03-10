@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace Doctrine\Annotations\TypeParser;
 
 use Doctrine\Annotations\Type\BooleanType;
-use Doctrine\Annotations\Type\Constant\BooleanType as ConstantBooleanType;
+use Doctrine\Annotations\Type\Constant\ConstantBooleanType;
+use Doctrine\Annotations\Type\Constant\NullType;
 use Doctrine\Annotations\Type\FloatType;
 use Doctrine\Annotations\Type\IntegerType;
 use Doctrine\Annotations\Type\IntersectionType;
 use Doctrine\Annotations\Type\ListType;
 use Doctrine\Annotations\Type\MapType;
 use Doctrine\Annotations\Type\MixedType;
-use Doctrine\Annotations\Type\NullType;
 use Doctrine\Annotations\Type\ObjectType;
 use Doctrine\Annotations\Type\StringType;
 use Doctrine\Annotations\Type\Type;
 use Doctrine\Annotations\Type\UnionType;
+use Doctrine\Annotations\TypeParser\Exception\TypeNotSupported;
 use Hoa\Compiler\Llk\TreeNode;
 use Hoa\Visitor\Element;
 use Hoa\Visitor\Visit;
 use function array_map;
 use function assert;
+use function strcasecmp;
 
 final class TypeVisitor implements Visit
 {
@@ -29,31 +31,33 @@ final class TypeVisitor implements Visit
     {
         assert($element instanceof TreeNode);
 
-        if ($element->getId() === Nodes::NULL) {
+        $id = $element->getId();
+
+        if ($id === Nodes::NULL) {
             return new NullType();
         }
 
-        if ($element->getId() === Nodes::BOOLEAN) {
+        if ($id === Nodes::BOOLEAN) {
             if ($element->getChildrenNumber() === 0) {
                 return new BooleanType();
             }
 
-            return new ConstantBooleanType($element->getChild(0)->getValueValue() === 'true');
+            return new ConstantBooleanType(strcasecmp($element->getChild(0)->getValueValue(), 'true') === 0);
         }
 
-        if ($element->getId() === Nodes::INTEGER) {
+        if ($id === Nodes::INTEGER) {
             return new IntegerType();
         }
 
-        if ($element->getId() === Nodes::FLOAT) {
+        if ($id === Nodes::FLOAT) {
             return new FloatType();
         }
 
-        if ($element->getId() === Nodes::STRING) {
+        if ($id === Nodes::STRING) {
             return new StringType();
         }
 
-        if ($element->getId() === Nodes::ITERABLE) {
+        if ($id === Nodes::ITERABLE) {
             if ($element->getChildrenNumber() === 0) {
                 return new IterableType();
             }
@@ -63,11 +67,11 @@ final class TypeVisitor implements Visit
             // TODO
         }
 
-        if ($element->getId() === Nodes::CALLABLE) {
-            return new CallableType();
+        if ($id === Nodes::CALLABLE) {
+            throw TypeNotSupported::callableNotSupported();
         }
 
-        if ($element->getId() === Nodes::OBJECT) {
+        if ($id === Nodes::OBJECT) {
             if ($element->getChildrenNumber() === 0) {
                 return new ObjectType(null);
             }
@@ -79,7 +83,7 @@ final class TypeVisitor implements Visit
             // TODO generic
         }
 
-        if ($element->getId() === Nodes::ARRAY) {
+        if ($id === Nodes::ARRAY) {
             if ($element->getChildrenNumber() === 0) {
                 return new MapType(new UnionType(new IntegerType(), new StringType()), new MixedType());
             }
@@ -96,7 +100,7 @@ final class TypeVisitor implements Visit
             }
         }
 
-        if ($element->getId() === Nodes::LIST) {
+        if ($id === Nodes::LIST) {
             $depth = ($element->getChildrenNumber() - 1) / 2;
             $list  = new ListType($this->visit($element->getChild(0)));
 
@@ -107,7 +111,7 @@ final class TypeVisitor implements Visit
             return $list;
         }
 
-        if ($element->getId() === Nodes::UNION) {
+        if ($id === Nodes::UNION) {
             return new UnionType(
                 ...array_map(
                     function (TreeNode $node) : Type {
@@ -118,7 +122,7 @@ final class TypeVisitor implements Visit
             );
         }
 
-        if ($element->getId() === Nodes::INTERSECTION) {
+        if ($id === Nodes::INTERSECTION) {
             return new IntersectionType(
                 ...array_map(
                     function (TreeNode $node) : Type {

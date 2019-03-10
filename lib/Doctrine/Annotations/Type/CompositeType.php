@@ -9,4 +9,8 @@ namespace Doctrine\Annotations\Type;
  */
 interface CompositeType extends Type
 {
+    /**
+     * @return Type[]
+     */
+    public function getSubTypes() : array;
 }

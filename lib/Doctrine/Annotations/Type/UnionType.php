@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Doctrine\Annotations\Type;
 
+use Doctrine\Annotations\Type\Exception\CompositeTypeRequiresAtLeastTwoSubTypes;
 use function array_map;
-use function assert;
 use function count;
 use function implode;
 use function sprintf;
@@ -20,9 +20,19 @@ final class UnionType implements CompositeType
 
     public function __construct(Type ...$subTypes)
     {
-        assert(count($subTypes) >= 2);
+        if (count($subTypes) < 2) {
+            throw CompositeTypeRequiresAtLeastTwoSubTypes::fromInsufficientAmount(count($subTypes));
+        }
 
         $this->subTypes = $subTypes;
+    }
+
+    /**
+     * @return Type[]
+     */
+    public function getSubTypes() : array
+    {
+        return $this->subTypes;
     }
 
     public function describe() : string
@@ -49,19 +59,6 @@ final class UnionType implements CompositeType
     {
         foreach ($this->subTypes as $subType) {
             if (! $subType->validate($value)) {
-                continue;
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public function acceptsNull() : bool
-    {
-        foreach ($this->subTypes as $subType) {
-            if (! $subType->acceptsNull()) {
                 continue;
             }
 

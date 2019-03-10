@@ -23,9 +23,4 @@ class StringType implements ScalarType
     {
         return is_string($value);
     }
-
-    public function acceptsNull() : bool
-    {
-        return false;
-    }
 }

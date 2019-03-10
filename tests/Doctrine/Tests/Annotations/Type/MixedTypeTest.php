@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\MixedType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\MixedType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
-use function fclose;
 use function fopen;
 
 final class MixedTypeTest extends TypeTest
@@ -17,9 +16,9 @@ final class MixedTypeTest extends TypeTest
         return new MixedType();
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('mixed', $this->getType()->describe());
+        return 'mixed';
     }
 
     /**
@@ -41,15 +40,6 @@ final class MixedTypeTest extends TypeTest
      */
     public function invalidValidateValuesProvider() : iterable
     {
-        try {
-            yield [$f = fopen(__FILE__, 'r')];
-        } finally {
-            @fclose($f);
-        }
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertTrue($this->getType()->acceptsNull());
+        yield [fopen('php://temp', 'r')];
     }
 }

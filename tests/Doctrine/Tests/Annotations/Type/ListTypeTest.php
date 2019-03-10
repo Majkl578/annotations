@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\ListType;
-use Doctrine\Annotations\Metadata\Type\StringType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\ListType;
+use Doctrine\Annotations\Type\StringType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
 use function sprintf;
 
@@ -17,9 +17,9 @@ final class ListTypeTest extends TypeTest
         return new ListType($this->getInternalType());
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame(sprintf('array<%s>', $this->getInternalType()->describe()), $this->getType()->describe());
+        return sprintf('array<%s>', $this->getInternalType()->describe());
     }
 
     /**
@@ -42,11 +42,6 @@ final class ListTypeTest extends TypeTest
             ['foo' => 'bar'],
             [new stdClass()],
         ];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertSame($this->getInternalType()->acceptsNull(), $this->getType()->acceptsNull());
     }
 
     private function getInternalType() : Type

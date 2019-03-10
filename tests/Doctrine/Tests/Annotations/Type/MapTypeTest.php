@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\MapType;
-use Doctrine\Annotations\Metadata\Type\MixedType;
-use Doctrine\Annotations\Metadata\Type\ScalarType;
-use Doctrine\Annotations\Metadata\Type\StringType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\MapType;
+use Doctrine\Annotations\Type\MixedType;
+use Doctrine\Annotations\Type\ScalarType;
+use Doctrine\Annotations\Type\StringType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
 
 final class MapTypeTest extends TypeTest
@@ -18,9 +18,9 @@ final class MapTypeTest extends TypeTest
         return new MapType($this->getKeyType(), $this->getValueType());
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('array<string, mixed>', $this->getType()->describe());
+        return 'array<string, mixed>';
     }
 
     /**
@@ -55,11 +55,6 @@ final class MapTypeTest extends TypeTest
             [1 => 'bar'],
             ['baz' => new stdClass(), 1 => 'zaz'],
         ];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertSame($this->getValueType()->acceptsNull(), $this->getType()->acceptsNull());
     }
 
     private function getKeyType() : ScalarType

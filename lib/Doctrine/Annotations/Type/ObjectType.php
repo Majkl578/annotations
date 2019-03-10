@@ -35,9 +35,4 @@ class ObjectType implements Type
     {
         return is_object($value) && ($this->name === null || $value instanceof $this->name);
     }
-
-    public function acceptsNull() : bool
-    {
-        return false;
-    }
 }

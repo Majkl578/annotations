@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Doctrine\Annotations\Type\Constant;
 
-use Doctrine\Annotations\Type\BooleanType as GenericBooleanType;
+use Doctrine\Annotations\Type\BooleanType;
 use Doctrine\Annotations\Type\ConstantScalarType;
 
 /**
  * @internal
  */
-final class BooleanType extends GenericBooleanType implements ConstantScalarType
+final class ConstantBooleanType extends BooleanType implements ConstantScalarType
 {
     /** @var bool */
     private $value;
@@ -23,6 +23,15 @@ final class BooleanType extends GenericBooleanType implements ConstantScalarType
     public function getValue() : bool
     {
         return $this->value;
+    }
+
+    public function describe() : string
+    {
+        if ($this->value === true) {
+            return 'true';
+        }
+
+        return 'false';
     }
 
     public function validate($value) : bool

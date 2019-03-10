@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\BooleanType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\BooleanType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
 
 final class BooleanTypeTest extends TypeTest
@@ -15,9 +15,9 @@ final class BooleanTypeTest extends TypeTest
         return new BooleanType();
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('boolean', $this->getType()->describe());
+        return 'bool';
     }
 
     /**
@@ -40,10 +40,5 @@ final class BooleanTypeTest extends TypeTest
         yield ['0'];
         yield [[0]];
         yield [new stdClass()];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertFalse($this->getType()->acceptsNull());
     }
 }

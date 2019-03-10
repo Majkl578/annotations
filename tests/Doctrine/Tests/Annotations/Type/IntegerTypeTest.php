@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\IntegerType;
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\IntegerType;
+use Doctrine\Annotations\Type\Type;
 use stdClass;
 use const PHP_INT_MAX;
 use const PHP_INT_MIN;
@@ -17,9 +17,9 @@ final class IntegerTypeTest extends TypeTest
         return new IntegerType();
     }
 
-    public function testDescribe() : void
+    public function getDescription() : string
     {
-        self::assertSame('integer', $this->getType()->describe());
+        return 'int';
     }
 
     /**
@@ -44,10 +44,5 @@ final class IntegerTypeTest extends TypeTest
         yield ['0'];
         yield [[0]];
         yield [new stdClass()];
-    }
-
-    public function testAcceptsNull() : void
-    {
-        self::assertFalse($this->getType()->acceptsNull());
     }
 }

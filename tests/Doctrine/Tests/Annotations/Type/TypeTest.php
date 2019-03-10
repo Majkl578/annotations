@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Doctrine\Tests\Annotations\Metadata\Type;
+namespace Doctrine\Tests\Annotations\Type;
 
-use Doctrine\Annotations\Metadata\Type\Type;
+use Doctrine\Annotations\Type\Type;
 use PHPUnit\Framework\TestCase;
 
 abstract class TypeTest extends TestCase
@@ -26,14 +26,19 @@ abstract class TypeTest extends TestCase
         return $this->type;
     }
 
-    abstract public function testDescribe() : void;
+    final public function testDescribe() : void
+    {
+        self::assertSame($this->getDescription(), $this->type->describe());
+    }
+
+    abstract public function getDescription() : string;
 
     /**
      * @param mixed $value
      *
      * @dataProvider validValidateValuesProvider()
      */
-    public function testValidValidateValues($value) : void
+    final public function testValidValidateValues($value) : void
     {
         self::assertTrue($this->type->validate($value));
     }
@@ -48,7 +53,7 @@ abstract class TypeTest extends TestCase
      *
      * @dataProvider invalidValidateValuesProvider()
      */
-    public function testInvalidValidateValues($value) : void
+    final public function testInvalidValidateValues($value) : void
     {
         self::assertFalse($this->type->validate($value));
     }
@@ -57,6 +62,4 @@ abstract class TypeTest extends TestCase
      * @return mixed[][]
      */
     abstract public function invalidValidateValuesProvider() : iterable;
-
-    abstract public function testAcceptsNull() : void;
 }

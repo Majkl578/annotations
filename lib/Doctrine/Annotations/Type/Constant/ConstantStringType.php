@@ -6,11 +6,13 @@ namespace Doctrine\Annotations\Type\Constant;
 
 use Doctrine\Annotations\Type\ConstantScalarType;
 use Doctrine\Annotations\Type\StringType as GenericStringType;
+use function addcslashes;
+use function sprintf;
 
 /**
  * @internal
  */
-final class StringType extends GenericStringType implements ConstantScalarType
+final class ConstantStringType extends GenericStringType implements ConstantScalarType
 {
     /** @var string */
     private $value;
@@ -23,6 +25,11 @@ final class StringType extends GenericStringType implements ConstantScalarType
     public function getValue() : string
     {
         return $this->value;
+    }
+
+    public function describe() : string
+    {
+        return sprintf('"%s"', addcslashes($this->value, '"'));
     }
 
     public function validate($value) : bool
