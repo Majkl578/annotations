@@ -7,6 +7,7 @@ namespace Doctrine\Annotations\Metadata;
 use Doctrine\Annotations\Annotation\Attribute;
 use Doctrine\Annotations\Annotation\Attributes;
 use Doctrine\Annotations\Annotation\Enum;
+use Doctrine\Annotations\Annotation\Implicit;
 use Doctrine\Annotations\Annotation\Target;
 
 /**
@@ -68,6 +69,11 @@ final class InternalAnnotations
                     'literal',
                     ['type' => 'array']
                 )
+            ),
+            new AnnotationMetadata(
+                Implicit::class,
+                AnnotationTarget::property(),
+                false
             ),
             new AnnotationMetadata(
                 Target::class,

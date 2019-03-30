@@ -7,6 +7,8 @@ use Doctrine\Annotations\DocParser;
 use Doctrine\Annotations\Annotation\Target;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationTargetAll;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationWithConstants;
+use Doctrine\Tests\Annotations\Fixtures\AnnotationWithImplicitProperty;
+use Doctrine\Tests\Annotations\Fixtures\AnnotationWithImplicitRequiredProperty;
 use Doctrine\Tests\Annotations\Fixtures\ClassWithConstants;
 use Doctrine\Tests\Annotations\Fixtures\InterfaceWithConstants;
 use PHPUnit\Framework\TestCase;
@@ -1393,6 +1395,75 @@ DOCBLOCK;
 
         self::assertCount(1, $result);
         self::assertInstanceOf(SomeAnnotationClassNameWithoutConstructorAndProperties::class, $result[0]);
+    }
+
+    public function testImplicitAnnotationPropertyConstructs() : void
+    {
+        $parser = $this->createTestParser();
+
+        $annotations = $parser->parse('@' . AnnotationWithImplicitProperty::class . '(123)');
+        self::assertCount(1, $annotations);
+        self::assertFalse($annotations[0]->a);
+        self::assertSame(123, $annotations[0]->b);
+        self::assertNull($annotations[0]->c);
+    }
+
+    public function testImplicitAnnotationPropertyConstructsWithOtherPropertyValues() : void
+    {
+        $parser = $this->createTestParser();
+
+        $annotations = $parser->parse('@' . AnnotationWithImplicitProperty::class . '(123, a = true, c = "hello")');
+        self::assertCount(1, $annotations);
+        self::assertTrue($annotations[0]->a);
+        self::assertSame(123, $annotations[0]->b);
+        self::assertSame('hello', $annotations[0]->c);
+    }
+
+    public function testImplicitAnnotationPropertyConstructsWithNoPropertyValues() : void
+    {
+        $parser = $this->createTestParser();
+
+        $annotations = $parser->parse('@' . AnnotationWithImplicitProperty::class);
+        self::assertCount(1, $annotations);
+        self::assertFalse($annotations[0]->a);
+        self::assertSame(0, $annotations[0]->b);
+        self::assertNull($annotations[0]->c);
+    }
+
+    public function testImplicitRequiredAnnotationPropertyConstructs() : void
+    {
+        $parser = $this->createTestParser();
+
+        $annotations = $parser->parse('@' . AnnotationWithImplicitRequiredProperty::class . '(123)');
+        self::assertCount(1, $annotations);
+        self::assertFalse($annotations[0]->a);
+        self::assertSame(123, $annotations[0]->b);
+        self::assertNull($annotations[0]->c);
+    }
+
+    public function testImplicitRequiredAnnotationPropertyConstructsWithOtherPropertyValues() : void
+    {
+        $parser = $this->createTestParser();
+
+        $annotations = $parser->parse('@' . AnnotationWithImplicitRequiredProperty::class . '(123, a = true, c = "hello")');
+        self::assertCount(1, $annotations);
+        self::assertTrue($annotations[0]->a);
+        self::assertSame(123, $annotations[0]->b);
+        self::assertSame('hello', $annotations[0]->c);
+    }
+
+    public function testImplicitAnnotationRequiredPropertyDoesNotConstructsWithoutValue() : void
+    {
+        $parser = $this->createTestParser();
+
+        $this->expectException(AnnotationException::class);
+        $this->expectExceptionMessage(
+            sprintf(
+                '[Type Error] Attribute "b" of @%s declared on  expects a(n) int. This value should not be null.',
+                AnnotationWithImplicitRequiredProperty::class
+            )
+        );
+        $parser->parse('@' . AnnotationWithImplicitRequiredProperty::class);
     }
 }
 

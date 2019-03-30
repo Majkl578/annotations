@@ -440,24 +440,26 @@ final class DocParser
 
         // if there is no constructor we will inject values into public properties
 
+        $defaultFound       = false;
+        $propertiesBuilders = [];
+
         // collect all public properties
-        foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC) as $i => $property) {
+        foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
             $propertyBuilder = new PropertyMetadataBuilder($property->getName());
             $propertyComment = $property->getDocComment();
 
-            if ($i === 0) {
-                $propertyBuilder->withBeingDefault();
-            }
-
-
             if ($propertyComment === false) {
-                $annotationBuilder->withProperty($propertyBuilder->build());
+                $propertiesBuilders[] = $propertyBuilder;
 
                 continue;
             }
 
+            $default      = strpos($propertyComment, '@Implicit') !== false;
+            $defaultFound = $defaultFound || $default;
+
             $attribute           = new Attribute();
             $attribute->required = (false !== strpos($propertyComment, '@Required'));
+            $attribute->default  = $default;
             $attribute->name     = $property->name;
             $attribute->type     = (false !== strpos($propertyComment, '@var') && preg_match('/@var\s+([^\s]+)/',$propertyComment, $matches))
                 ? $matches[1]
@@ -485,6 +487,14 @@ final class DocParser
                 }
             }
 
+            $propertiesBuilders[] = $propertyBuilder;
+        }
+
+        if (! $defaultFound && count($propertiesBuilders) !== 0) {
+            $propertiesBuilders[0]->withBeingDefault();
+        }
+
+        foreach ($propertiesBuilders as $propertyBuilder) {
             $annotationBuilder->withProperty($propertyBuilder->build());
         }
 
@@ -508,6 +518,10 @@ final class DocParser
 
         if ($attribute->required) {
             $metadata->withBeingRequired();
+        }
+
+        if ($attribute->default) {
+            $metadata->withBeingDefault();
         }
 
         // Evaluate type

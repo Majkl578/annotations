@@ -26,4 +26,9 @@ final class Attribute
      * @var boolean
      */
     public $required = false;
+
+    /**
+     * @var bool
+     */
+    public $default = false;
 }
