@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Doctrine\Annotations\Metadata\Assembler;
 
 use Doctrine\Annotations\Annotation\Annotation as AnnotationAnnotation;
+use Doctrine\Annotations\Annotation\Enum;
 use Doctrine\Annotations\Annotation\Required as RequiredAnnotation;
 use Doctrine\Annotations\Annotation\Target as TargetAnnotation;
 use Doctrine\Annotations\Assembler\Assembler;
@@ -166,15 +167,23 @@ final class AnnotationMetadataAssembler
         $scope               = $this->scopeManufacturer->manufacturePropertyScope($property);
         $hydratedAnnotations = $this->hydrateInternalAnnotations($this->parser->compile($docBlock), $scope);
 
-        $required = $this->findAnnotation(RequiredAnnotation::class, $hydratedAnnotations) !== null;
+        /** @var RequiredAnnotation|null $required */
+        $required = $this->findAnnotation(RequiredAnnotation::class, $hydratedAnnotations);
+        /** @var Enum|null $enum */
+        $enum = $this->findAnnotation(Enum::class, $hydratedAnnotations);
 
         $type = $this->typeParser->parsePropertyType($property->getDocComment(), $scope);
 
         if ($required && ! $type->acceptsNull()) {
-            // TODO: throw deprecated warning?
             $type = new UnionType($type, new NullType());
         }
 
-        return new PropertyMetadata($property->getName(), $type, $first);
+        return new PropertyMetadata(
+            $property->getName(),
+            $type,
+            $first,
+            $enum ? $enum->value : [],
+            $required !== null
+        );
     }
 }

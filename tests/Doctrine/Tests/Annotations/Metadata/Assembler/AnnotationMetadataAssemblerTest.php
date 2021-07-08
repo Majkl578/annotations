@@ -28,12 +28,14 @@ use Doctrine\Annotations\Parser\Reference\StaticReferenceResolver;
 use Doctrine\Annotations\Parser\Scope;
 use Doctrine\Annotations\PhpParser;
 use Doctrine\Annotations\TypeParser\PHPStanTypeParser;
+use Doctrine\Tests\Annotations\Fixtures\AnnotationEnum;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationTargetAll;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationTargetAnnotation;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationWithConstants;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationWithRequiredAttributes;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationWithRequiredAttributesWithoutConstructor;
 use Doctrine\Tests\Annotations\Fixtures\AnnotationWithVarType;
+use Doctrine\Tests\Annotations\Fixtures\Metadata\AnnotationEnumMetadata;
 use Doctrine\Tests\Annotations\Fixtures\Metadata\AnnotationTargetAllMetadata;
 use Doctrine\Tests\Annotations\Fixtures\Metadata\AnnotationWithConstantsMetadata;
 use Doctrine\Tests\Annotations\Fixtures\Metadata\AnnotationWithVarTypeMetadata;
@@ -131,23 +133,30 @@ class AnnotationMetadataAssemblerTest extends TestCase
                 $this->assertSame(AnnotationWithRequiredAttributesWithoutConstructor::class, $metadata->getName());
                 $this->assertTrue($metadata->getTarget()->all(), 'Invalid target');
                 $this->assertFalse($metadata->hasConstructor(), 'Has constructor');
-                $properties = $metadata->getProperties();
+                $properties         = $metadata->getProperties();
+                $expectedProperties = [
+                    'value' => new PropertyMetadata(
+                        'value',
+                        TestNullableType::fromType(new StringType()),
+                        true,
+                        [],
+                        true
+                    ),
+                    'annot' => new PropertyMetadata(
+                        'annot',
+                        TestNullableType::fromType(new ObjectType(AnnotationTargetAnnotation::class)),
+                        false,
+                        [],
+                        true
+                    ),
+                ];
+
                 $this->assertEquals(
-                    [
-                        'value' => new PropertyMetadata(
-                            'value',
-                            TestNullableType::fromType(new StringType()),
-                            true
-                        ),
-                        'annot' => new PropertyMetadata(
-                            'annot',
-                            TestNullableType::fromType(new ObjectType(AnnotationTargetAnnotation::class))
-                        ),
-                    ],
+                    $expectedProperties,
                     $properties
                 );
                 $this->assertEquals(
-                    new PropertyMetadata('value', TestNullableType::fromType(new StringType()), true),
+                    $expectedProperties['value'],
                     $metadata->getDefaultProperty()
                 );
             },
@@ -166,6 +175,14 @@ class AnnotationMetadataAssemblerTest extends TestCase
             new Scope(new ReflectionClass($this), new Imports([]), new IgnoredAnnotations()),
             function (AnnotationMetadata $metadata) : void {
                 $this->assertEquals(AnnotationWithConstantsMetadata::get(), $metadata);
+            },
+        ];
+
+        yield 'fixture - AnnotationEnum' => [
+            new Reference(AnnotationEnum::class, true),
+            new Scope(new ReflectionClass($this), new Imports([]), new IgnoredAnnotations()),
+            static function (AnnotationMetadata $metadata) : void {
+                self::assertEquals(AnnotationEnumMetadata::get(), $metadata);
             },
         ];
     }

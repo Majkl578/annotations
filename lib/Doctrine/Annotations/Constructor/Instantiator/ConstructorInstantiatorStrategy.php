@@ -19,7 +19,7 @@ final class ConstructorInstantiatorStrategy implements InstantiatorStrategy
             $defaultProperty = $metadata->getDefaultProperty();
             assert($defaultProperty !== null);
 
-            $parameters['value'] = $parameters[null];
+            $parameters[$defaultProperty->getName()] = $parameters[null];
             unset($parameters[null]);
         }
 

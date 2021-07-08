@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Annotations\Assembler\Validator;
 
-use Doctrine\Annotations\Assembler\Validator\Exception\InvalidValue;
+use Doctrine\Annotations\Assembler\Validator\Exception\InvalidPropertyValue;
 use Doctrine\Annotations\Assembler\Validator\ValueValidator;
-use Doctrine\Annotations\Metadata\PropertyMetadata;
 use Doctrine\Annotations\Metadata\Type\StringType;
-use Doctrine\Tests\Annotations\Metadata\AnnotationMetadataMother;
+use Doctrine\Annotations\Metadata\Type\Type;
 use Doctrine\Tests\Annotations\Metadata\Type\PropertyMetadataMother;
 use PHPUnit\Framework\TestCase;
 
-class ValueValidatorTest extends TestCase
+final class ValueValidatorTest extends TestCase
 {
     /** @var ValueValidator */
     private $validator;
@@ -25,22 +24,24 @@ class ValueValidatorTest extends TestCase
     /**
      * @param mixed $value
      *
-     * @dataProvider validExamples
+     * @dataProvider validTypeValidationProvider
      */
-    public function testValidate(PropertyMetadata $propertyMetadata, $value) : void
+    public function testValidatesValuesMatchingType(Type $type, $value) : void
     {
-        $this->validator->validate(AnnotationMetadataMother::example(), $propertyMetadata, $value);
+        $metadata = PropertyMetadataMother::withType($type);
 
-        $this->assertTrue(true);
+        $this->validator->validate($metadata, $value);
+
+        self::assertTrue(true);
     }
 
     /**
      * @return mixed[]
      */
-    public function validExamples() : iterable
+    public function validTypeValidationProvider() : iterable
     {
         yield 'valid string' => [
-            PropertyMetadataMother::withType(new StringType()),
+            new StringType(),
             'foo',
         ];
     }
@@ -48,22 +49,24 @@ class ValueValidatorTest extends TestCase
     /**
      * @param mixed $value
      *
-     * @dataProvider invalidExamples
+     * @dataProvider invalidTypeValidationProvider
      */
-    public function testNotValidatesInvalidExamplesAndThrows(PropertyMetadata $propertyMetadata, $value) : void
+    public function testNotValidatesValuesNotMatchingTypeAndThrows(Type $type, $value) : void
     {
-        $this->expectException(InvalidValue::class);
+        $metadata = PropertyMetadataMother::withType($type);
 
-        $this->validator->validate(AnnotationMetadataMother::example(), $propertyMetadata, $value);
+        $this->expectException(InvalidPropertyValue::class);
+
+        $this->validator->validate($metadata, $value);
     }
 
     /**
      * @return mixed[]
      */
-    public function invalidExamples() : iterable
+    public function invalidTypeValidationProvider() : iterable
     {
         yield 'value not matching property type' => [
-            PropertyMetadataMother::withType(new StringType()),
+            new StringType(),
             42,
         ];
     }

@@ -25,11 +25,11 @@ final class TargetValidator
         }
 
         if ($scope->isNested()) {
-            if (! $target->annotation()) {
-                throw InvalidTarget::annotation($metadata);
+            if ($target->annotation()) {
+                return;
             }
 
-            return;
+            throw InvalidTarget::annotation($metadata);
         }
 
         $subject = $scope->getSubject();
@@ -45,7 +45,5 @@ final class TargetValidator
         if ($subject instanceof ReflectionMethod && ! $target->method()) {
             throw InvalidTarget::method($metadata);
         }
-
-        // TODO validate annotation target
     }
 }

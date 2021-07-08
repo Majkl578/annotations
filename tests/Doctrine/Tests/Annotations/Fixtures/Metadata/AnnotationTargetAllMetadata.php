@@ -6,6 +6,7 @@ namespace Doctrine\Tests\Annotations\Fixtures\Metadata;
 
 use Doctrine\Annotations\Metadata\AnnotationMetadata;
 use Doctrine\Annotations\Metadata\AnnotationTarget;
+use Doctrine\Annotations\Assembler\Validator\Constraint\TypeConstraint;
 use Doctrine\Annotations\Metadata\PropertyMetadata;
 use Doctrine\Annotations\Metadata\Type\IntegerType;
 use Doctrine\Annotations\Metadata\Type\MixedType;
